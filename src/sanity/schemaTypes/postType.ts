@@ -39,6 +39,14 @@ export const postType = defineType({
           name: "alt",
           title: "Alternative text",
           type: "string",
+          validation: (rule) =>
+            rule.custom((value, context) => {
+              const parent = context?.parent as { asset?: { _ref?: string } };
+
+              return !value && parent?.asset?._ref
+                ? "Alt text is required when an image is present"
+                : true;
+            }),
         },
       ],
     }),
